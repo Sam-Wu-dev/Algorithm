@@ -59,8 +59,8 @@ bool KMP(vector<int>& failure_function,string& s,string& p){
     return 0;
 }
 int main(){
-    string s="aababcabcddfadsafdasabcdeddafds";
-    string p="abcde";
+    string s="abbababababbbababbabaaabbababaa";
+    string p="ababbababaa";
     // string s="abcdabdaabcdaabcdbcd";
     // string p="abcdabdaabcdabcdabcd";
     vector<int> failure_function=Failure_Function2(p);
