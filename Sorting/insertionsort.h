@@ -8,7 +8,7 @@ void insertion_sort(I begin,I end){
     I left=begin+1;
     I right=end;
     while(left!=right){
-        // typename std::iterator_traits<I>::value_type key=*left;
+        // typename I::value_type key=*left;
         auto key=*left;// the unsorted element
         I now=left-1;
         while(now>=begin&&key<*now){

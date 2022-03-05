@@ -12,14 +12,14 @@ void merge_sort(I begin,I end){
         return;
     }
     auto middle=begin+size/2;// find the middle point
-    merge_sort(begin,middle);// 1.
+    merge_sort(begin,middle);// step 1.
     merge_sort(middle,end);
     auto i=begin;
     auto j=middle;
     vector<typename std::iterator_traits<I>::value_type> temp;
     temp.reserve(size);
     while(i!=middle&&j!=end){
-        // 2.
+        // step 2.
         if(*i<*j){
             temp.push_back(*i);
             i++;
