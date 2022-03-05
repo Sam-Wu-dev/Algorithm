@@ -3,8 +3,8 @@
 using namespace std;
 template <typename I>
 void quick_sort(I begin, I end){
-    // Choose a element to be pivot, then divide the elements into two parts, one is smaller the pivot, the other one is bigger.
-    // Recursiviely do it to the two parts until it's sorted.
+    // Choose a element to be pivot, then divide the elements into two parts, one is smaller then pivot, the other one is bigger.
+    // Recursiviely do it until it's sorted.
     if (begin >= end)
         return;
     auto pivot = *begin;// choose the first element as the pivot
