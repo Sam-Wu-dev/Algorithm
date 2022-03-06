@@ -7,6 +7,7 @@
 #include "mergesort.h"
 #include "heapsort.h"
 #include "radixsort.h"
+#include "shellsort.h"
 using namespace std;
 
 template<typename C>
@@ -24,6 +25,7 @@ int main(){
     // selection_sort(vec.begin(),vec.end());
     // merge_sort(vec.begin(),vec.end());
     // heap_sort(vec.begin(),vec.end());
-      radix_sort(vec.begin(),vec.end());
+    // radix_sort(vec.begin(),vec.end());
+     shell_sort(vec.begin(),vec.end(),{8,4,2,1});
     print(vec);
 }
