@@ -1,15 +1,20 @@
 #include <iostream>
 #include <vector>
 #include <list>
-#include "insertionsort.h"
-#include "quicksort.h"
-#include "selectionsort.h"
-#include "mergesort.h"
-#include "heapsort.h"
-#include "radixsort.h"
-#include "shellsort.h"
+//#include <ctime>
+#include <chrono>
+#include <limits>
+#include <random> /* 亂數相關函數 */
+#include "sort_algorithm/insertionsort.h"
+#include "sort_algorithm/quicksort.h"
+#include "sort_algorithm/selectionsort.h"
+#include "sort_algorithm/mergesort.h"
+#include "sort_algorithm/heapsort.h"
+#include "sort_algorithm/radixsort.h"
+#include "sort_algorithm/shellsort.h"
 using namespace std;
 
+int vector_size=10000;
 template<typename C>
 void print(C c){
     for(auto i=c.begin();i!=c.end();i++){
@@ -19,13 +24,24 @@ void print(C c){
 }
 
 int main(){
-    vector<int> vec{1,3,5,2,2,1,3,532,4,100,2,32,65,21,54,87,65,34,54,3,9,2,2,2,62,4,98,4};
+    vector<int> vec;
+    random_device rd;
+    mt19937 generator( rd() );// 梅森旋轉演算法 
+    uniform_int_distribution<int> uid(0,INT_MAX);
+    for(int i=0;i<vector_size;i++){
+        vec.push_back(uid(generator));
+    }
     // insertion_sort(vec.begin(),vec.end());
-    // quick_sort(vec.begin(),vec.end());
+    auto start = chrono::steady_clock::now();
+    quick_sort(vec.begin(),vec.end());
     // selection_sort(vec.begin(),vec.end());
     // merge_sort(vec.begin(),vec.end());
     // heap_sort(vec.begin(),vec.end());
     // radix_sort(vec.begin(),vec.end());
-     shell_sort(vec.begin(),vec.end(),{8,4,2,1});
-    print(vec);
+    // srand( time(nullptr) );
+    // shell_sort(vec.begin(),vec.end(),{8,4,2,1});
+    auto elasped = chrono::steady_clock::now() - start;
+    auto execution_time=chrono::duration_cast<chrono::nanoseconds>(elasped).count();
+    cout<<vec.size()<<endl;
+    cout<<execution_time<<endl;
 }

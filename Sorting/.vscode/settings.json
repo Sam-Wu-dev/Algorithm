@@ -11,6 +11,8 @@
         "system_error": "cpp",
         "vector": "cpp",
         "xstddef": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "initializer_list": "cpp",
+        "ostream": "cpp"
     }
 }
