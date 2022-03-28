@@ -36,7 +36,7 @@ int main(){
         // quick_sort(vec.begin(),vec.end());
         // selection_sort(vec.begin(),vec.end());
         // merge_sort(vec.begin(),vec.end());
-        heap_sort(vec.begin(),vec.end());
+        // heap_sort(vec.begin(),vec.end());
         // radix_sort(vec.begin(),vec.end());
         // shell_sort(vec.begin(),vec.end());
         auto elasped = chrono::steady_clock::now() - start;
