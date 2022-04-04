@@ -18,7 +18,7 @@ void shell_sort(I begin,I end){
             for(auto k=j+i;k<end;k+=i){
                 auto key=*k;
                 auto now=k-i;
-                while(key<=*now&&now>=begin){
+                while(now>=begin&&key<=*now){
                     swap(*now,*(now+i));
                     now-=i;
                 }
