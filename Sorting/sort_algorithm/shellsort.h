@@ -13,6 +13,14 @@ void shell_sort(I begin,I end){
         n/=2;
     }
     reverse(gap.begin(),gap.end());
+    // while(n>1){
+    //     gap.push_back(n/2);
+    //     n/=2;
+    // }
+    // for(auto i:gap){
+    //     cout<<i<<" ";
+    // }
+    // cout<<endl;
     for(auto i:gap){
         for(auto j=begin;j<begin+i;j++){
             for(auto k=j+i;k<end;k+=i){

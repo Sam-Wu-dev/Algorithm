@@ -50,9 +50,9 @@ int main(){
         // merge_sort(vec.begin(),vec.end()); 
         // heap_sort(vec.begin(),vec.end());
         // radix_sort(vec.begin(),vec.end());
-         shell_sort(vec.begin(),vec.end());
+        shell_sort(vec.begin(),vec.end());
         auto elasped = chrono::steady_clock::now() - start;
         auto execution_time=chrono::duration_cast<chrono::microseconds>(elasped).count();
-        cout<<'#'<<vec.size()<<':'<<execution_time<<" "<<verify(vec)<<endl;
+        cout<<'#'<<vec.size()<<':'<<execution_time<<endl;
     }
 }
