@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "stack": "cpp",
-        "utility": "cpp",
-        "tuple": "cpp",
-        "vector": "cpp"
-    }
-}
