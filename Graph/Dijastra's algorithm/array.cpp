@@ -56,6 +56,8 @@ int main()
         int min_v = findMin(dis, record);
         for (int j = 1; j <= n; j++)
         {
+            if (record[j])
+                continue;
             if (dis[min_v] + table[min_v][j] < dis[j])
             {
                 dis[j] = table[min_v][j] + dis[min_v];
@@ -75,3 +77,4 @@ int main()
     cout << parent[n] << endl;
     return 0;
 }
+// Time complexity O(n^3)

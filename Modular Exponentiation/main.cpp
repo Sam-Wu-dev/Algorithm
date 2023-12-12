@@ -22,6 +22,6 @@ int modular_exponentiation(int b, int n, int m)
 
 int main()
 {
-    cout << modular_exponentiation(2, 3, 3) << endl;
-    cout << int(pow(2, 3)) % 3 << endl;
+    cout << modular_exponentiation(3, 644, 645) << endl;
+    cout << int(pow(3, 644)) % 645 << endl;
 }

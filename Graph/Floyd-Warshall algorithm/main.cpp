@@ -7,7 +7,6 @@ using namespace std;
 
 int main()
 {
-    // Dijastra's algorithm
     int n, m;
     cin >> n >> m;
     vector<vector<float>> table(n + 1, vector<float>(n + 1, maxf));
@@ -59,3 +58,4 @@ int main()
     }
     return 0;
 }
+// Time complexity O(n^3)

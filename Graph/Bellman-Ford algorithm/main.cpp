@@ -76,3 +76,4 @@ int main()
     cout << parent[n] << endl;
     return 0;
 }
+// Time complexity O(nm), n is vertex number, m is edge number
