@@ -26,42 +26,33 @@ int main()
     // Dijastra's algorithm
     int n, m, s;
     cin >> n >> m;
-    vector<vector<float>> table(n + 1, vector<float>(n + 1, maxf));
     vector<float> dis(n + 1, maxf);
     vector<int> parent(n + 1);
     vector<bool> record(n + 1, false);
+    vector<vector<pair<int, float>>> edges(n + 1);
     for (int i = 0; i < m; i++)
     {
         int a, b;
         float c;
         cin >> a >> b >> c;
-        table[a][b] = c;
-        table[b][a] = c;
-    }
-    for (int i = 1; i <= n; i++)
-    {
-        table[i][i] = 0;
+        edges[a].push_back({b, c});
+        edges[b].push_back({a, c});
     }
     cin >> s;
-    for (int j = 1; j <= n; j++)
-    {
-        dis[j] = table[s][j];
-        parent[j] = s;
-    }
     parent[s] = 0;
-    record[s] = true;
-    for (int k = 1; k < n; k++)
+    dis[s] = 0;
+    for (int k = 0; k < n; k++)
     {
-
         int min_v = findMin(dis, record);
-        for (int j = 1; j <= n; j++)
+        for (auto edge : edges[min_v])
         {
-            if (record[j])
+            int target = edge.first;
+            if (record[target])
                 continue;
-            if (dis[min_v] + table[min_v][j] < dis[j])
+            if (dis[min_v] + edge.second < dis[target])
             {
-                dis[j] = table[min_v][j] + dis[min_v];
-                parent[j] = min_v;
+                dis[target] = dis[min_v] + edge.second;
+                parent[target] = min_v;
             }
         }
     }
@@ -77,4 +68,4 @@ int main()
     cout << parent[n] << endl;
     return 0;
 }
-// Time complexity O(n^3)
+// Time complexity O(n^2)

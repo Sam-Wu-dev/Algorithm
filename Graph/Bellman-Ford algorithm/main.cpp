@@ -1,16 +1,9 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include "../edge.hpp"
 #define maxf 100000
 using namespace std;
-
-struct Edge
-{
-    int from;
-    int target;
-    float val;
-    Edge(int a, int b, float c) : from(a), target(b), val(c) {}
-};
 
 int main()
 {
