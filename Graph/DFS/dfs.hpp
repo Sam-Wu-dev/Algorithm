@@ -19,6 +19,7 @@ struct Node
     shared_ptr<Node> parent;
     int initialTime = INT_MAX;
     int finishTime = INT_MAX;
+    int low = INT_MAX;
     Color color = WHITE;
     Node(Vertex &v) : vertex(v) {}
     Node(Vertex &v, shared_ptr<Node> p, int i, int f, Color c) : vertex(v), parent(p), initialTime(i), color(c) {}
@@ -29,6 +30,7 @@ class DFSTree : public Graph
 private:
     int order = 0;
     vector<shared_ptr<Node>> nodes;
+    vector<shared_ptr<Node>> articulationPoints;
     vector<shared_ptr<Edge>> cross_edges; //  Edges that connect vertices in a way that they are neither ancestors nor descendants of each other.
     vector<shared_ptr<Edge>> back_edges;  // Edges that connect a vertex to an ancestor in the DFS tree.
     vector<shared_ptr<Edge>> front_edges; // Edges that lead to an unvisited vertex.
@@ -43,9 +45,14 @@ public:
         }
     }
 
-    void start()
+    void start(int root)
     {
         int order = 0;
+        // if (adj[nodes[root]->vertex.index].size() > 1)
+        // {
+        //     articulationPoints[nodes[root]->vertex.index] = true;
+        // }
+        DFS(nodes[root]);
         for (int i = 0; i < V.size(); i++)
         {
             if (nodes[i]->color != BLACK)
@@ -55,22 +62,28 @@ public:
         }
     }
 
-    void DFS(shared_ptr<Node> now)
+    int DFS(shared_ptr<Node> now)
     {
         now->color = GRAY;
         now->initialTime = order++;
+        now->low = now->initialTime;
 
+        int maxLow = -1;
         for (auto e : adj[now->vertex.index])
         {
+            if (nodes[e.to] == now->parent || nodes[e.to] == now)
+                continue;
             switch (nodes[e.to]->color)
             {
             case WHITE:
                 nodes[e.to]->parent = now;
                 front_edges.push_back(make_shared<Edge>(e));
-                DFS(nodes[e.to]);
+                maxLow = max(maxLow, DFS(nodes[e.to]));
+                now->low = min(nodes[e.to]->low, now->low);
                 break;
             case GRAY:
                 back_edges.push_back(make_shared<Edge>(e));
+                now->low = min(now->low, nodes[e.to]->initialTime);
                 break;
             case BLACK:
                 cross_edges.push_back(make_shared<Edge>(e));
@@ -79,22 +92,17 @@ public:
         }
         now->color = BLACK;
         now->finishTime = order++;
+        if (now->initialTime <= maxLow)
+        {
+            articulationPoints.push_back(now);
+        }
+        return max(maxLow, now->low);
     }
 
-    void TopologicalSort()
+    void TopologicalOrder()
     {
         sort(nodes.begin(), nodes.end(), [](shared_ptr<Node> a, shared_ptr<Node> b)
              { return a->finishTime < b->finishTime; });
-    }
-
-    void TraversalOrderSort()
-    {
-        sort(nodes.begin(), nodes.end(), [](shared_ptr<Node> a, shared_ptr<Node> b)
-             { return a->initialTime < b->initialTime; });
-    }
-
-    void printNodes()
-    {
         for (auto n : nodes)
         {
             cout << n->vertex.name << " -> ";
@@ -102,8 +110,32 @@ public:
         cout << endl;
     }
 
+    void TraversalOrder()
+    {
+        sort(nodes.begin(), nodes.end(), [](shared_ptr<Node> a, shared_ptr<Node> b)
+             { return a->initialTime < b->initialTime; });
+        for (auto n : nodes)
+        {
+            cout << n->vertex.name << " -> ";
+        }
+        cout << endl;
+    }
+
+    void printNodes()
+    {
+        for (auto n : nodes)
+        {
+            cout << "Name: " << n->vertex.name << ", InitialTime: " << n->initialTime << ", FinishTime: " << n->finishTime << ", Low:" << n->low << endl;
+        }
+    }
+
     void printArticulationPoints()
     {
+        for (auto n : articulationPoints)
+        {
+            cout << n->vertex.name << " ";
+        }
+        cout << endl;
     }
 };
 

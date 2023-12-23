@@ -21,13 +21,13 @@ vector<tuple<int, int, float>> edges = {
 int main()
 {
     DFSTree graph(vertices, edges);
-    graph.start();
+    graph.start(4);
+    cout << "DFS Analysis" << endl;
+    graph.printNodes();
     cout << "Traversal order: " << endl;
-    graph.TraversalOrderSort();
-    graph.printNodes();
+    graph.TraversalOrder();
     cout << "Topologic order: " << endl;
-    graph.TopologicalSort();
-    graph.printNodes();
+    graph.TopologicalOrder();
     cout << "Articulation points: " << endl;
     graph.printArticulationPoints();
 }
