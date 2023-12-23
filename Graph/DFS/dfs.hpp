@@ -29,6 +29,7 @@ class DFSTree : public Graph
 {
 private:
     int order = 0;
+    int root;
     vector<shared_ptr<Node>> nodes;
     vector<shared_ptr<Node>> articulationPoints;
     vector<shared_ptr<Edge>> cross_edges; //  Edges that connect vertices in a way that they are neither ancestors nor descendants of each other.
@@ -45,14 +46,11 @@ public:
         }
     }
 
-    void start(int root)
+    void start(int r)
     {
+        root = r;
         int order = 0;
-        // if (adj[nodes[root]->vertex.index].size() > 1)
-        // {
-        //     articulationPoints[nodes[root]->vertex.index] = true;
-        // }
-        DFS(nodes[root]);
+        DFS(nodes[r]);
         for (int i = 0; i < V.size(); i++)
         {
             if (nodes[i]->color != BLACK)
@@ -62,12 +60,12 @@ public:
         }
     }
 
-    int DFS(shared_ptr<Node> now)
+    void DFS(shared_ptr<Node> now)
     {
         now->color = GRAY;
         now->initialTime = order++;
         now->low = now->initialTime;
-
+        int count = 0;
         int maxLow = -1;
         for (auto e : adj[now->vertex.index])
         {
@@ -76,10 +74,12 @@ public:
             switch (nodes[e.to]->color)
             {
             case WHITE:
+                count++;
                 nodes[e.to]->parent = now;
                 front_edges.push_back(make_shared<Edge>(e));
-                maxLow = max(maxLow, DFS(nodes[e.to]));
+                DFS(nodes[e.to]);
                 now->low = min(nodes[e.to]->low, now->low);
+                maxLow = max(maxLow, nodes[e.to]->low);
                 break;
             case GRAY:
                 back_edges.push_back(make_shared<Edge>(e));
@@ -92,11 +92,11 @@ public:
         }
         now->color = BLACK;
         now->finishTime = order++;
-        if (now->initialTime <= maxLow)
+        if (now->vertex.index == root && count > 1 || now->vertex.index != root && now->initialTime <= maxLow)
         {
             articulationPoints.push_back(now);
         }
-        return max(maxLow, now->low);
+        return;
     }
 
     void TopologicalOrder()
@@ -126,6 +126,14 @@ public:
         for (auto n : nodes)
         {
             cout << "Name: " << n->vertex.name << ", InitialTime: " << n->initialTime << ", FinishTime: " << n->finishTime << ", Low:" << n->low << endl;
+        }
+    }
+
+    void printBackEdges()
+    {
+        for (auto e : back_edges)
+        {
+            cout << V[e->from].name << " -> " << V[e->to].name << endl;
         }
     }
 
