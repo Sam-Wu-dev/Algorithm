@@ -4,6 +4,7 @@
 #include <limits>
 #include <string>
 #include <tuple>
+#include <memory>
 
 using namespace std;
 struct Vertex
@@ -27,19 +28,6 @@ public:
     vector<Vertex> V;
     vector<vector<Edge>> adj;
     vector<vector<float>> table;
-    Graph(int n, vector<tuple<int, int, float>> edges)
-    {
-        int index = 0;
-        for (int i = 0; i < n; i++)
-        {
-            V.push_back(Vertex(
-                index++));
-        }
-        for (auto edge : edges)
-        {
-            E.push_back(Edge(get<0>(edge), get<1>(edge), get<2>(edge)));
-        }
-    }
     Graph(vector<string> vertices, vector<tuple<int, int, float>> edges)
     {
         int index = 0;
@@ -53,7 +41,7 @@ public:
             E.push_back(Edge(get<0>(edge), get<1>(edge), get<2>(edge)));
         }
     }
-    void initialize_adj()
+    void initialize_adj_list()
     {
         adj.resize(V.size());
         for (const auto &edge : E)
