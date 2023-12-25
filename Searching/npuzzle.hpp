@@ -352,8 +352,6 @@ class RBFS : public BFS
 {
 private:
     string target;
-    std::priority_queue<std::shared_ptr<BFSNode>, vector<std::shared_ptr<BFSNode>>, CompareBFSNode> pq;
-    std::unordered_set<std::string> visited;
 
 public:
     RBFS(const vector<vector<int>> &initialState, const vector<vector<int>> &finalState) : BFS(initialState, finalState) {}
@@ -361,25 +359,20 @@ public:
     bool solve()
     {
         maxStates = 0;
-        visited.clear();
         moves.clear();
-        while (!pq.empty())
-        {
-            pq.pop();
-        }
         target = createStateKey(finalState);
-        auto result = R_BFS(std::make_shared<BFSNode>(initialState, nullptr, find(initialState, 0), 0, heuristic(initialState, finalState)), INT_MAX);
+        auto result = R_BFS(std::make_shared<BFSNode>(initialState, nullptr, find(initialState, 0), 0, heuristic(initialState, finalState)), INT_MAX, 0);
         return result.first;
     }
-    pair<bool, int> R_BFS(shared_ptr<BFSNode> node, int f_limit)
+    pair<bool, int> R_BFS(shared_ptr<BFSNode> node, int f_limit, size_t stateNum)
     {
+        maxStates = max(maxStates, stateNum);
         if (createStateKey(node->image) == target)
         {
-            getPath(node);
-            maxStates = visited.size();
+            getPath(node); // use parent to get path
             return {true, node->f};
         }
-
+        std::priority_queue<std::shared_ptr<BFSNode>, vector<std::shared_ptr<BFSNode>>, CompareBFSNode> pq;
         for (int i = 0; i < 4; i++)
         {
             auto move = static_cast<Movement::Dir>(i);
@@ -389,34 +382,30 @@ public:
             {
                 vector<vector<int>> after = node->image;
                 swap(after[node->now.first][node->now.second], after[next.first][next.second]);
-                std::string stateKey = createStateKey(after);
                 int cost = max(node->f, heuristic(after, finalState) + node->g + 1);
-                if (visited.find(stateKey) == visited.end())
-                {
-                    pq.push(std::make_shared<BFSNode>(after, node, next, node->g + 1, cost));
-                    visited.insert(stateKey);
-                }
+                pq.push(std::make_shared<BFSNode>(after, node, next, node->g + 1, cost));
             }
         }
+        int count = pq.size();
         while (!pq.empty())
         {
-            auto best = pq.top(); // Keep the best node in the queue
-            if (best->f > f_limit)
-            {
-                return {false, best->f}; // f_limit exceeded
-            }
-            // Remove best node for exploration and get the second-best node
+            auto best = pq.top();
             pq.pop();
-            shared_ptr<BFSNode> second = (!pq.empty()) ? pq.top() : nullptr;
-            int new_f_limit = (second) ? min(f_limit, second->f) : f_limit;
-            int temp = best->f;
-            // Recursive call with updated f_limit
-            auto result = R_BFS(best, new_f_limit);
-            if (result.first)
-                return result;
+            if (best->f > f_limit)
+                return {false, best->f};
+            if (pq.empty())
+            {
+                return R_BFS(best, f_limit, stateNum + count);
+            }
+            auto second = pq.top();
+            auto result = R_BFS(best, min(second->f, f_limit), stateNum + count);
+            best->f = result.second;
             pq.push(best);
+            if (result.first)
+            {
+                return result;
+            }
         }
-        maxStates = visited.size();
         return {false, INT_MAX};
     }
 };

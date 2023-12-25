@@ -37,15 +37,14 @@ void print(vector<vector<int>> &vec)
 }
 int main()
 {
-    vector<int> vertices(grid_size * grid_size);
-    for (int i = 0; i < vertices.size(); ++i)
-    {
-        vertices[i] = i;
-    }
-    shuffleTiles(vertices); // Randomly shuffle the tiles
-    vector<vector<int>> initializeState = test_data[0].first;
-    vector<vector<int>> finalState = test_data[0].second;
-    // vector<vector<int>> initializeState = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
+    // vector<int> vertices(grid_size * grid_size);
+    // for (int i = 0; i < vertices.size(); ++i)
+    // {
+    //     vertices[i] = i;
+    // }
+    // shuffleTiles(vertices); // Randomly shuffle the tiles
+    // vector<vector<int>> initializeState;
+    // vector<vector<int>> finalState{{7, 14, 11, 5}, {8, 12, 13, 10}, {2, 0, 4, 15}, {6, 3, 9, 1}};
     // for (int i = 0; i < grid_size; i++)
     // {
     //     initializeState.push_back({});
@@ -54,13 +53,11 @@ int main()
     //         initializeState[i].push_back(vertices[i * grid_size + j]);
     //     }
     // }
+
+    vector<vector<int>> initializeState = test_data[2].first;
+    vector<vector<int>> finalState = test_data[2].second;
     cout << "Initial state:" << endl;
     print(initializeState);
-    cout << "---------------------------------" << endl;
-    cout << "Solving with A* algorithm" << endl;
-    AStar astar(initializeState, finalState);
-    astar.solve();
-    astar.analysis();
     cout << "---------------------------------" << endl;
     cout << "Solving with Iterative Depth First Search" << endl;
     IDFS idfs(initializeState, finalState);
@@ -76,6 +73,11 @@ int main()
     GBFS gbfs(initializeState, finalState);
     gbfs.solve();
     gbfs.analysis();
+    cout << "---------------------------------" << endl;
+    cout << "Solving with A* algorithm" << endl;
+    AStar astar(initializeState, finalState);
+    astar.solve();
+    astar.analysis();
     cout << "---------------------------------" << endl;
     cout << "Solving with Recursive Best First Search" << endl;
     RBFS rbfs(initializeState, finalState);
