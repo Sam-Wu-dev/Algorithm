@@ -27,7 +27,7 @@ struct Node
 
 class DFSTree : public Graph
 {
-private:
+protected:
     int order = 0;
     int root;
     vector<shared_ptr<Node>> nodes;
@@ -37,7 +37,7 @@ private:
     vector<shared_ptr<Edge>> front_edges; // Edges that lead to an unvisited vertex.
 
 public:
-    DFSTree(vector<string> vertices, vector<tuple<int, int, float>> edges) : Graph(vertices, edges)
+    DFSTree(vector<string> vertices, vector<tuple<int, int, float>> edges) : Graph(vertices, edges, false)
     {
         initialize_adj_list();
         for (int i = 0; i < V.size(); i++)
@@ -102,7 +102,8 @@ public:
     void TopologicalOrder()
     {
         sort(nodes.begin(), nodes.end(), [](shared_ptr<Node> a, shared_ptr<Node> b)
-             { return a->finishTime < b->finishTime; });
+             { return a->finishTime > b->finishTime; });
+        cout << "Topological order:" << endl;
         for (auto n : nodes)
         {
             cout << n->vertex.name << " -> ";

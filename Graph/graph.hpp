@@ -28,7 +28,8 @@ public:
     vector<Vertex> V;
     vector<vector<Edge>> adj;
     vector<vector<float>> table;
-    Graph(vector<string> vertices, vector<tuple<int, int, float>> edges)
+    bool directed;
+    Graph(vector<string> vertices, vector<tuple<int, int, float>> edges, bool d) : directed(d)
     {
         int index = 0;
         for (auto s : vertices)
@@ -48,6 +49,8 @@ public:
         {
             // Assuming the graph is undirected. If it's directed, remove the second push_back.
             adj[edge.from].push_back(edge);
+            if (directed)
+                continue;
             adj[edge.to].push_back(Edge(edge.to, edge.from, edge.weight)); // Add this for undirected graph
         }
     }

@@ -73,7 +73,6 @@ protected:
     const vector<vector<int>> &finalState;
     size_t maxStates = 0;
     vector<Movement::Dir> moves;
-
     struct Node
     {
         std::shared_ptr<Node> parent;
