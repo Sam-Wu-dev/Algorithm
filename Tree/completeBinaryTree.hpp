@@ -1,17 +1,24 @@
 #ifndef COMPLETEBINARYTREE_HPP
 #define COMPLETEBINARYTREE_HPP
+#include <iostream>
 #include <vector>
 #include <memory>
 #include <math.h>
+#include <iomanip>
 using namespace std;
 
 struct Node
 {
-    shared_ptr<Node> left;
-    shared_ptr<Node> right;
     int val;
-    Node(int val) : left(nullptr), right(nullptr), val(val) {}
-    Node(shared_ptr<Node> left, shared_ptr<Node> right, int val) : left(left), right(right), val(val) {}
+    Node(int val) : val(val) {}
+    bool operator<(Node &other)
+    {
+        return this->val < other.val;
+    }
+    bool operator>(Node &other)
+    {
+        return this->val > other.val;
+    }
 };
 
 class CompleteBinaryTree
@@ -41,18 +48,26 @@ protected:
 public:
     void print()
     {
-        int depth = 0;
-        for (int i = 0; i < tree.size(); i++)
+        if (tree.empty())
+            return;
+
+        int depth = log2(tree.size()) + 1;
+        int max_width = (1 << (depth + 1)) - 1; // Increased width for more spacing
+        int index = 0;
+
+        for (int level = 0; level < depth; level++)
         {
-            cout << tree[i].val << " ";
-            int d = log2(i + 1);
-            if (d > depth)
+            int level_width = (1 << level);
+            int space = max_width / level_width;
+            int half_space = space / 2;
+
+            for (int i = 0; i < level_width && index < tree.size(); i++, index++)
             {
-                depth = d;
-                cout << endl;
+                cout << setw((i == 0) ? half_space : space) << tree[index].val;
             }
+
+            cout << endl;
         }
-        cout << endl;
     }
 };
 #endif
