@@ -3,17 +3,17 @@
 #include <memory>
 #include <string>
 #include "../doubleEndedPriorityQueue.hpp"
-#include "../minMaxHeap.hpp"
+#include "../deap.hpp"
 
 using namespace std;
 
 int main()
 {
-    unique_ptr<DEPQ> test = make_unique<MinMaxHeap>(vector<int>{2, 20, 12});
+    unique_ptr<DEPQ> test = make_unique<Deap>(vector<int>{2, 20, 12, 30, 40, 50, 60, 70});
     string command;
     int value;
 
-    cout << "Min-Max Heap CLI. Available commands: insert, getmin, getmax, deletemin, deletemax, print, quit" << endl;
+    cout << "Deap CLI. Available commands: insert, getmin, getmax, deletemin, deletemax, print, quit" << endl;
 
     while (true)
     {

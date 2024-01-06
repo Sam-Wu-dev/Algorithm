@@ -45,6 +45,11 @@ protected:
     }
     int getGrandParent(int index) { return getParent(getParent(index)); }
 
+    int getDepth(int index)
+    {
+        return log2(index + 1);
+    }
+
 public:
     void print()
     {

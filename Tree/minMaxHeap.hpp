@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <string>
 #include <math.h>
-
+#include <optional>
 #include "doubleEndedPriorityQueue.hpp"
 #include "completeBinaryTree.hpp"
 
@@ -156,7 +156,7 @@ public:
         int parent = getParent(index);
         Node &top = tree[parent];
         Node &down = tree[index];
-        int depth = log2(parent + 1);
+        int depth = getDepth(parent);
         switch (getType(depth))
         {
         case MIN:
@@ -183,16 +183,23 @@ public:
             break;
         }
     }
-    int getMin()
-    {
-        return tree.empty() ? -1 : tree[0].val;
-    }
-    int getMax()
+    std::optional<int> getMin()
     {
         if (tree.empty())
-            return -1;
+        {
+            return std::nullopt;
+        }
+        return tree[0].val;
+    }
+
+    std::optional<int> getMax()
+    {
+        if (tree.empty())
+        {
+            return std::nullopt;
+        }
         int maxNode = 0;
-        int lastNode = min(int(tree.size() - 1), getRight(0));
+        int lastNode = std::min(int(tree.size() - 1), getRight(0));
         for (int i = 0; i < lastNode; i++)
         {
             if (tree[i] > tree[maxNode])
@@ -202,22 +209,27 @@ public:
         }
         return tree[maxNode].val;
     }
-    int deleteMin()
+
+    std::optional<int> deleteMin()
     {
         if (tree.empty())
-            return -1;
+        {
+            return std::nullopt;
+        }
         int minValue = tree[0].val;
         swap(tree[0], tree.back());
         tree.pop_back();
         sinkDownMin(0);
         return minValue;
     }
-    int deleteMax()
+    std::optional<int> deleteMax()
     {
         if (tree.empty())
-            return -1;
+        {
+            return std::nullopt;
+        }
         int maxNode = 0;
-        int lastNode = min(int(tree.size() - 1), getRight(0));
+        int lastNode = std::min(int(tree.size() - 1), getRight(0));
         for (int i = 0; i <= lastNode; i++)
         {
             if (tree[i] > tree[maxNode])
