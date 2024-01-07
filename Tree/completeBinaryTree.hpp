@@ -25,32 +25,47 @@ class CompleteBinaryTree
 {
 protected:
     vector<Node> tree;
-    int getParent(int index)
+
+public:
+    static int getParent(int index)
     {
         if (index == 0 || index == -1)
             return -1; // Root node has no parent
         return (index - 1) / 2;
     }
 
-    int getLeft(int index)
+    static int getLeft(int index)
     {
         int leftIndex = 2 * index + 1;
         return leftIndex; // Caller should check if leftIndex is within bounds of the array
     }
 
-    int getRight(int index)
+    static int getRight(int index)
     {
         int rightIndex = 2 * index + 2;
         return rightIndex; // Caller should check if rightIndex is within bounds of the array
     }
-    int getGrandParent(int index) { return getParent(getParent(index)); }
-
+    static int getGrandParent(int index) { return getParent(getParent(index)); }
+    int size()
+    {
+        return tree.size();
+    }
+    void clean()
+    {
+        tree.clear();
+    }
+    bool empty()
+    {
+        return tree.empty();
+    }
+    void set(int index, int val)
+    {
+        tree[index] = val;
+    }
     int getDepth(int index)
     {
         return log2(index + 1);
     }
-
-public:
     void print()
     {
         if (tree.empty())
