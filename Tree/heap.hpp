@@ -2,6 +2,7 @@
 #define HEAP_HPP
 
 #include <optional>
+#include <memory>
 #include <algorithm>
 #include "completeBinaryTree.hpp"
 using namespace std;
