@@ -5,7 +5,7 @@
 #include <queue>
 #include <iostream>
 #include <functional>
-#include "priorityQueue.hpp"
+#include <optional>
 
 using namespace std;
 
@@ -21,7 +21,7 @@ public:
     // Constructor and other methods...
 };
 
-class BinomialHeap : public PriorityQueue
+class BinomialHeap
 {
 
 private:
@@ -142,7 +142,7 @@ public:
         }
     }
     BinomialHeap(function<bool(int, int)> comparisonFunc) : comp(comparisonFunc), head(nullptr) {}
-    void insert(int element) override
+    void insert(int element)
     {
         shared_ptr<BinomialNode> newNode = make_shared<BinomialNode>(element);
         if (!head)
@@ -158,7 +158,7 @@ public:
     }
 
     // Returns the minimum element without removing it (if exists)
-    std::optional<int> getTop() const override
+    optional<int> getTop() const
     {
         if (!head)
             return nullopt;
@@ -176,7 +176,7 @@ public:
     }
 
     // Returns and removes the minimum element (if exists)
-    std::optional<int> deleteTop() override
+    optional<int> deleteTop()
     {
         if (!head)
         {
@@ -223,25 +223,20 @@ public:
 
         return topValue;
     }
-    void merge(PriorityQueue &other)
+    void merge(BinomialHeap &other)
     {
-        auto otherHeapPtr = dynamic_cast<BinomialHeap *>(&other);
-        if (!otherHeapPtr)
-            return; // Type mismatch, cannot merge
-
-        auto &otherHeap = *otherHeapPtr;
-        if (!otherHeap.head)
+        if (!other.head)
             return; // Other heap is empty, nothing to merge
         if (!head)
         {
-            head = otherHeap.head; // Current heap is empty, just take the other heap
-            otherHeap.head = nullptr;
+            head = other.head; // Current heap is empty, just take the other heap
+            other.head = nullptr;
             return;
         }
 
-        head = mergeRootLists(head, otherHeap.head);
+        head = mergeRootLists(head, other.head);
         consolidate(head, comp);
-        otherHeap.head = nullptr; // Clear the other heap
+        other.head = nullptr; // Clear the other heap
     }
 
     // Clears all elements from the priority queue
