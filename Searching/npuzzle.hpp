@@ -6,6 +6,7 @@
 #include <stack>
 #include <memory>
 #include <unordered_set>
+#include <iostream>
 using namespace std;
 
 #define axis pair<int, int>

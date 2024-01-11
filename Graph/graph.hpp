@@ -7,8 +7,9 @@
 #include <memory>
 
 using namespace std;
-struct Vertex
+class Vertex
 {
+public:
     string name = "";
     int index;
     Vertex(int b) : index(b) {}

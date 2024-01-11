@@ -1,25 +1,30 @@
 #ifndef HEAP_HPP
 #define HEAP_HPP
-
+#include <functional>
 #include <optional>
 #include <memory>
 #include <algorithm>
 #include "completeBinaryTree.hpp"
 using namespace std;
 
-class Heap : public CompleteBinaryTree
+template <class T>
+class Heap : public CompleteBinaryTree<T>
 {
 public:
-    virtual void insert(int) = 0; // O(log n)
+    virtual void insert(T) = 0; // O(log n)
     virtual void bubbleUp(int) = 0;
     virtual int sinkDown(int) = 0;
-    virtual optional<int> deleteTop() = 0; // O(log n)
-    virtual optional<int> getTop() = 0;    // O(1)
+    virtual optional<T> deleteTop() = 0; // O(log n)
+    virtual optional<T> getTop() = 0;    // O(1)
 };
-
-class MinHeap : public Heap
+template <class T>
+class MinHeap : public Heap<T>
 {
 public:
+    using Heap<T>::getParent;
+    using Heap<T>::getLeft;
+    using Heap<T>::getRight;
+    using Heap<T>::tree;
     void bubbleUp(int now)
     {
         int parent = getParent(now);
@@ -60,40 +65,44 @@ public:
         return now;
     }
     MinHeap() {}
-    MinHeap(vector<int> arr)
+    MinHeap(vector<T> arr)
     {
-        for (int i : arr)
+        for (T i : arr)
         {
             insert(i);
         }
     }
-    void insert(int val)
+    void insert(T val)
     {
         int now = tree.size();
         tree.push_back(val);
         bubbleUp(now);
     }
-    optional<int> getTop()
+    optional<T> getTop()
     {
         if (tree.empty())
             return nullopt;
-        return tree[0].val;
+        return tree[0];
     }
-    optional<int> deleteTop()
+    optional<T> deleteTop()
     {
         if (tree.empty())
             return nullopt;
-        int temp = tree[0].val;
+        auto temp = tree[0];
         swap(tree[0], tree.back());
         tree.pop_back();
         sinkDown(0);
         return temp;
     }
 };
-
-class MaxHeap : public CompleteBinaryTree
+template <class T>
+class MaxHeap : public Heap<T>
 {
 public:
+    using Heap<T>::getParent;
+    using Heap<T>::getLeft;
+    using Heap<T>::getRight;
+    using Heap<T>::tree;
     void bubbleUp(int now)
     {
         int parent = getParent(now);
@@ -134,26 +143,26 @@ public:
         return now;
     }
     MaxHeap() {}
-    MaxHeap(vector<int> arr)
+    MaxHeap(vector<T> arr)
     {
-        for (int i : arr)
+        for (T i : arr)
         {
             insert(i);
         }
     }
-    void insert(int val)
+    void insert(T val)
     {
         int now = tree.size();
         tree.push_back(val);
         bubbleUp(now);
     }
-    optional<int> getTop()
+    optional<T> getTop()
     {
         if (tree.empty())
             return nullopt;
         return tree[0].val;
     }
-    optional<int> deleteTop()
+    optional<T> deleteTop()
     {
         if (tree.empty())
             return nullopt;

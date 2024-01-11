@@ -8,9 +8,16 @@ using namespace std;
 
 int main()
 {
-    auto test = MinHeap(vector<int>{2, 20, 12, 30, 40, 50, 60, 70});
+    vector<int> temp{2, 20, 12, 30, 40, 50, 60, 70};
+    vector<string> temp2{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
+    vector<Node2> arr;
+    for (auto i : temp2)
+    {
+        arr.push_back(Node2(i));
+    }
+    auto test = MinHeap<Node2>(arr);
     string command;
-    int value;
+    Node2 value;
 
     cout << "Min Heap CLI. Available commands: insert, getmin, getmax, deletemin, deletemax, print, quit" << endl;
 
