@@ -7,43 +7,44 @@
 #include <math.h>
 using namespace std;
 
+template <class T>
 struct Node
 {
     int val;
     int height;
-    shared_ptr<Node> left;
-    shared_ptr<Node> right;
+    shared_ptr<Node<T>> left;
+    shared_ptr<Node<T>> right;
     Node(int val, int height) : val(val), height(height) {}
 };
 
 template <class T>
-class AVLTree : public BinarySearchTree<T>
+class AVLTree : public BinarySearchTree<T, Node<T>>
 {
 private:
-    shared_ptr<Node> root;
-    shared_ptr<Node> LeftRotate(shared_ptr<Node> now)
+    shared_ptr<Node<T>> LeftRotate(shared_ptr<Node<T>> now)
     {
-        shared_ptr<Node> temp = now->right;
+        shared_ptr<Node<T>> temp = now->right;
         now->right = temp->left;
         temp->left = now;
+        now->height = 1 + max(height(now->left), height(now->right));
+        temp->height = 1 + max(height(temp->left), height(temp->right));
         return temp;
     }
-    shared_ptr<Node> RightRotate(shared_ptr<Node> now)
+    shared_ptr<Node<T>> RightRotate(shared_ptr<Node<T>> now)
     {
-        shared_ptr<Node> temp = now->left;
+        shared_ptr<Node<T>> temp = now->left;
         now->left = temp->right;
         temp->right = now;
+        now->height = 1 + max(height(now->left), height(now->right));
+        temp->height = 1 + max(height(temp->left), height(temp->right));
         return temp;
     }
-
-    int GetBalanceFactor(shared_ptr<Node> node)
+    int GetBalanceFactor(shared_ptr<Node<T>> node)
     {
-        int left = node->left ? node->left->height : 0;
-        int right = node->right ? node->right->height : 0;
-        return left - right;
+        return height(node->left) - height(node->right);
     }
 
-    shared_ptr<Node> fixImbalance(shared_ptr<Node> node)
+    shared_ptr<Node<T>> fixImbalance(shared_ptr<Node<T>> node)
     {
         int balanceFactor = GetBalanceFactor(node);
 
@@ -86,14 +87,14 @@ public:
     }
     void insert(T val)
     {
-        root = insertNode(root, val);
+        this->root = insertNode(this->root, val);
     }
 
-    shared_ptr<Node> insertNode(shared_ptr<Node> node, T val)
+    shared_ptr<Node<T>> insertNode(shared_ptr<Node<T>> node, T val)
     {
         if (!node)
         {
-            return make_shared<Node>(val, 1);
+            return make_shared<Node<T>>(val, 1);
         }
 
         if (val < node->val)
@@ -112,42 +113,21 @@ public:
         return fixImbalance(node);
     }
 
-    int height(shared_ptr<Node> node)
+    int height(shared_ptr<Node<T>> node)
     {
         if (!node)
             return 0;
         return node->height;
     }
 
-    bool find(T val)
-    {
-        auto now = root;
-        while (now)
-        {
-            if (now->val == val)
-            {
-                return true;
-            }
-            if (val < now->val)
-            {
-                now = now->left;
-            }
-            else
-            {
-                now = now->right;
-            }
-        }
-        return false;
-    }
-
     bool remove(T val)
     {
         bool removed = false;
-        root = removeNode(root, val, removed);
+        this->root = removeNode(this->root, val, removed);
         return removed;
     }
 
-    shared_ptr<Node> removeNode(shared_ptr<Node> node, T val, bool &removed)
+    shared_ptr<Node<T>> removeNode(shared_ptr<Node<T>> node, T val, bool &removed)
     {
         if (!node)
         {
@@ -172,7 +152,7 @@ public:
             // Case 1: Node with one child or no child.
             if (!node->left || !node->right)
             {
-                shared_ptr<Node> temp = node->left ? node->left : node->right;
+                shared_ptr<Node<T>> temp = node->left ? node->left : node->right;
 
                 // No child case.
                 if (!temp)
@@ -193,7 +173,7 @@ public:
             else
             {
                 // Case 2: Node with two children. Get the in-order successor.
-                shared_ptr<Node> successor = minValueNode(node->right);
+                shared_ptr<Node<T>> successor = this->Successor(node);
 
                 // Copy the in-order successor's data to this node.
                 node->val = successor->val;
@@ -213,58 +193,6 @@ public:
 
         // Check for balance factor and balance the tree if needed.
         return fixImbalance(node);
-    }
-
-    shared_ptr<Node> minValueNode(shared_ptr<Node> node)
-    {
-        shared_ptr<Node> current = node;
-        while (current->left)
-        {
-            current = current->left;
-        }
-        return current;
-    }
-    void printLevelOrder()
-    {
-        if (!root)
-            return;
-
-        queue<shared_ptr<Node>> q;
-        q.push(root);
-
-        while (!q.empty())
-        {
-            int levelSize = q.size();
-            for (int i = 0; i < levelSize; ++i)
-            {
-                auto node = q.front();
-                q.pop();
-                cout << node->val << " ";
-                if (node->left)
-                    q.push(node->left);
-                if (node->right)
-                    q.push(node->right);
-            }
-            cout << endl; // New line for each level
-        }
-    }
-
-    void inorderPrint(shared_ptr<Node> node)
-    {
-        if (node)
-        {
-            inorderPrint(node->left);
-            cout << node->val << " ";
-            inorderPrint(node->right);
-        }
-    }
-    void print()
-    {
-        inorderPrint(root);
-    }
-    void clean()
-    {
-        root = nullptr;
     }
 };
 #endif
