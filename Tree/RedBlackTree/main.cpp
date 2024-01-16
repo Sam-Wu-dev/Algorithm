@@ -10,7 +10,7 @@ int main()
     string command;
     int value;
 
-    cout << "Deap CLI. Available commands: insert, remove, print, quit" << endl;
+    cout << "Red Black tree CLI. Available commands: insert, remove, print, quit" << endl;
 
     while (true)
     {
